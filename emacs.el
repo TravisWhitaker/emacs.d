@@ -14,6 +14,12 @@
         (package-install 'use-package)
 )
 
+; Tell with-editor about Nix's emacsclient. This needs to happen before the
+; package starts up.
+(setq-default with-editor-emacsclient-executable
+              (format "%s/.nix-profile/bin/emacsclient" (getenv "HOME"))
+)
+
 (use-package evil :ensure t)
 (use-package general :ensure t)
 (use-package haskell-mode :ensure t)
@@ -53,6 +59,7 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ; Enforce 80 columns:
+(setq-default fill-column 80)
 (global-column-enforce-mode t)
 
 ; Show matching parens:
@@ -72,22 +79,23 @@
       )
 )
 
-; On macOS, use menu bar, /usr/bin/login as the shell:
+; We need to login in a funky way and turn on the menu bar on macOS.
 (when (eq system-type 'darwin)
       (progn (setq-default explicit-shell-file-name "/usr/bin/login")
-             (setq-default explicit-login-args '("-fp" "traviswhitaker" "bash"))
+             (setq-default explicit-login-args `("-fp" ,(getenv "USER") "bash"))
              (menu-bar-mode 1)
       )
 )
 
 ; Add Nix profile to exec path; emacs doesn't know about bashrc.
-(setenv "PATH" (concat "/Users/traviswhitaker/.nix-profile/bin:"
+(setenv "PATH" (concat (format "%s/.nix-profile/bin:" (getenv "HOME"))
                        (getenv "PATH")
                )
 )
-(setq-default exec-path (cons "/Users/traviswhitaker/.nix-profile/bin"
-                              exec-path
-                        )
+(setq-default exec-path
+              (cons (format "%s/.nix-profile/bin" (getenv "HOME"))
+                    exec-path
+              )
 )
 
 ; Markkdown stuff:
@@ -111,6 +119,7 @@
      (kbd "C-c C-c")
      'haskell-compile)
 )
+
 (setq-default haskell-indentation-layout-offset 4)
 (setq-default haskell-indentation-left-offset 4)
 (setq-default haskell-indentation-starter-offset 4)
@@ -118,13 +127,7 @@
 (setq-default haskell-indentation-where-post-offset 6)
 (setq-default haskell-indentation-electric-flag nil)
 
-
+; Org mode stuff:
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
-
-; Tell with-editor about Nix's emacsclient, need to change this
-; depending on how the machine is setup...
-(setq-default with-editor-emacsclient-executable
-              "/Users/traviswhitaker/.nix-profile/bin/emacsclient"
-)
