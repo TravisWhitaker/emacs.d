@@ -32,6 +32,12 @@
 (use-package magit :ensure t)
 (use-package quelpa :ensure t)
 (use-package quelpa-use-package :ensure t)
+(use-package frame-cmds
+             :quelpa (frame-cmds :fetcher github :repo "emacsmirror/frame-cmds")
+)
+(use-package frame-fns
+             :quelpa (frame-fns :fetcher github :repo "emacsmirror/frame-fns")
+)
 (use-package zoom-frm
              :quelpa (zoom-frm :fetcher github :repo "emacsmirror/zoom-frm")
 )
