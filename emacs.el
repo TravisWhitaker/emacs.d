@@ -78,6 +78,20 @@
 ; When graphical, use leuven, visual whitespace, bind frame zoom.
 (when (display-graphic-p)
       (progn (global-whitespace-mode)
+             (setq-default whitespace-style
+                           '( face
+                              trailing
+                              tabs
+                              ;spaces
+                              lines
+                              newline
+                              empty
+                              big-indent
+                              ;space-mark
+                              tab-mark
+                              newline-mark
+                            )
+             )
              (load-theme 'leuven)
              (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
              (global-set-key (kbd "C-+") 'zoom-all-frames-in)
