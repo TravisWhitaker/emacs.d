@@ -3,9 +3,7 @@
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives
-             '("melpa-stable" . "http://stable.melpa.org/packages/")
-)
-
+             '("melpa-stable" . "http://stable.melpa.org/packages/"))
 (setq-default package-enable-at-startup nil)
 (package-initialize)
 
@@ -86,7 +84,7 @@
                               lines
                               newline
                               empty
-                              big-indent
+                              ;big-indent
                               ;space-mark
                               tab-mark
                               newline-mark
@@ -121,23 +119,27 @@
 ; Markkdown stuff:
 (setq-default markdown-command "pandoc")
 
+(setq ispell-program-name "aspell")
+(setq ispell-extra-args '("--sug-mode=ultra" "--lang=en"))
+
 ; Haskell stuff:
 (require 'haskell-interactive-mode)
 (require 'haskell-process)
 (setq-default haskell-tags-on-save t)
-(setq-default haskell-process-type 'cabal-repl)
-(add-hook 'haskell-mode-hook #'interactive-haskell-mode)
-;; It's baffling, but it seems this hook _and_ eval-after-mode must be
-;; present for this to be set in the map...
-(add-hook 'haskell-mode-hook '(define-key 'haskell-mode-map
-                                          (kbd "C-c C-c")
-                                          'haskell-compile
-                              )
+(setq-default haskell-process-type 'cabal-new-repl)
+(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+; These should be default, not sure why they're missing...
+(define-key haskell-mode-map
+            (kbd "M-n")
+            'haskell-goto-next-error
 )
-(eval-after-load 'haskell-mode
-  '(define-key haskell-mode-map
-     (kbd "C-c C-c")
-     'haskell-compile)
+(define-key haskell-mode-map
+            (kbd "M-p")
+            'haskell-goto-prev-error
+)
+(define-key haskell-mode-map
+            (kbd "C-c M-p")
+            'haskell-goto-first-error
 )
 
 ; Cmm stuff:
