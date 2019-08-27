@@ -126,9 +126,9 @@
 (require 'haskell-interactive-mode)
 (require 'haskell-process)
 (setq-default haskell-tags-on-save t)
+(setq-default haskell-compile-cabal-build-command "cabal new-build")
 (setq-default haskell-process-type 'cabal-new-repl)
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-; These should be default, not sure why they're missing...
 (define-key haskell-mode-map
             (kbd "M-n")
             'haskell-goto-next-error
@@ -141,6 +141,9 @@
             (kbd "C-c M-p")
             'haskell-goto-first-error
 )
+
+; Dhall stuff:
+(add-hook 'dhall-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
 ; Cmm stuff:
 (add-to-list 'auto-mode-alist '("\\.cmm\\'" . c-mode))
