@@ -39,6 +39,7 @@
 (use-package zoom-frm
              :quelpa (zoom-frm :fetcher github :repo "emacsmirror/zoom-frm")
 )
+(use-package clues-theme :ensure t)
 
 ; No tool bar or menu bar:
 (tool-bar-mode -1)
@@ -90,7 +91,7 @@
                               newline-mark
                             )
              )
-             (load-theme 'leuven)
+             (load-theme 'clues t)
              (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
              (global-set-key (kbd "C-+") 'zoom-all-frames-in)
              (global-set-key (kbd "C--") 'zoom-all-frames-out)
