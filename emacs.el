@@ -99,14 +99,18 @@
 )
 
 ; We need to login in a funky way and turn on the menu bar on macOS.
+;(when (eq system-type 'darwin)
+;      (progn (setq-default explicit-shell-file-name "/usr/bin/login")
+;             (setq-default explicit-login-args `("-fp" ,(getenv "USER") "bash"))
+;             (menu-bar-mode 1)
+;      )
+;)
 (when (eq system-type 'darwin)
-      (progn (setq-default explicit-shell-file-name "/usr/bin/login")
-             (setq-default explicit-login-args `("-fp" ,(getenv "USER") "bash"))
-             (menu-bar-mode 1)
+      (progn (menu-bar-mode 1)
       )
 )
 
-; Add Nix profile to exec path; emacs doesn't know about bashrc.
+;;; Add Nix profile to exec path; emacs doesn't know about bashrc.
 (setenv "PATH" (concat (format "%s/.nix-profile/bin:" (getenv "HOME"))
                        (getenv "PATH")
                )
@@ -126,22 +130,35 @@
 ; Haskell stuff:
 (require 'haskell-interactive-mode)
 (require 'haskell-process)
-(setq-default haskell-tags-on-save t)
-(setq-default haskell-compile-cabal-build-command "cabal new-build")
-(setq-default haskell-process-type 'cabal-new-repl)
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-(define-key haskell-mode-map
-            (kbd "M-n")
-            'haskell-goto-next-error
-)
-(define-key haskell-mode-map
-            (kbd "M-p")
-            'haskell-goto-prev-error
-)
-(define-key haskell-mode-map
-            (kbd "C-c M-p")
-            'haskell-goto-first-error
-)
+(eval-after-load "haskell-mode"
+  '(define-key haskell-mode-map (kbd "C-c C-c") 'haskell-compile))
+
+(eval-after-load "haskell-cabal"
+  '(define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-compile))
+;;(setq-default haskell-tags-on-save t)
+;;(setq-default haskell-compile-cabal-build-command "cabal new-build")
+;;(setq-default haskell-process-type 'cabal-new-repl)
+;;(define-key haskell-mode-map
+;;            (kbd "M-n")
+;;            'haskell-goto-next-error
+;;)
+;;(define-key haskell-mode-map
+;;            (kbd "M-p")
+;;            'haskell-goto-prev-error
+;;)
+;;(define-key haskell-mode-map
+;;            (kbd "C-c M-p")
+;;            'haskell-goto-first-error
+;;)
+;;(define-key haskell-mode-map
+;;            (kbd "C-c C-c")
+;;            'haskell-compile
+;;)
+;;(define-key haskell-cabal-mode-map
+;;            (kbd "C-c C-c")
+;;            'haskell-compile
+;;)
 
 ; Dhall stuff:
 (add-hook 'dhall-mode-hook (lambda () (setq indent-tabs-mode nil)))
@@ -160,3 +177,6 @@
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
+
+; Have tramp use SSH socket instead of SCP
+(setq tramp-default-method "ssh")
