@@ -74,6 +74,51 @@
 ; Show line numbers.
 (global-display-line-numbers-mode)
 
+(if (display-graphic-p)
+    (progn (global-whitespace-mode)
+           (setq-default whitespace-style
+                         '( face
+                            trailing
+                            tabs
+                            ;spaces
+                            lines
+                            newline
+                            empty
+                            ;big-indent
+                            ;space-mark
+                            tab-mark
+                            newline-mark
+                          )
+           )
+           (load-theme 'clues t)
+           (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+           (global-set-key (kbd "C-+") 'zoom-all-frames-in)
+           (global-set-key (kbd "C--") 'zoom-all-frames-out)
+    )
+    (progn (global-whitespace-mode)
+           (setq-default whitespace-style
+                         '( face
+                            trailing
+                            tabs
+                            ;spaces
+                            lines
+                            newline
+                            empty
+                            ;big-indent
+                            ;space-mark
+                            tab-mark
+                            newline-mark
+                          )
+           )
+           (load-theme 'clues t)
+           (custom-set-faces
+            '(font-lock-comment-delimiter-face
+                ((t (:inherit font-lock-comment-face :inverse-video t))))
+            '(font-lock-comment-face
+                ((t (:foreground "#90A0A0" :inverse-video t :slant italic)))))
+    )
+)
+
 ; When graphical, use leuven, visual whitespace, bind frame zoom.
 (when (display-graphic-p)
       (progn (global-whitespace-mode)
