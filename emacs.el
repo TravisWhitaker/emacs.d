@@ -119,43 +119,12 @@
     )
 )
 
-; When graphical, use leuven, visual whitespace, bind frame zoom.
-(when (display-graphic-p)
-      (progn (global-whitespace-mode)
-             (setq-default whitespace-style
-                           '( face
-                              trailing
-                              tabs
-                              ;spaces
-                              lines
-                              newline
-                              empty
-                              ;big-indent
-                              ;space-mark
-                              tab-mark
-                              newline-mark
-                            )
-             )
-             (load-theme 'clues t)
-             (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-             (global-set-key (kbd "C-+") 'zoom-all-frames-in)
-             (global-set-key (kbd "C--") 'zoom-all-frames-out)
-      )
-)
-
-; We need to login in a funky way and turn on the menu bar on macOS.
-;(when (eq system-type 'darwin)
-;      (progn (setq-default explicit-shell-file-name "/usr/bin/login")
-;             (setq-default explicit-login-args `("-fp" ,(getenv "USER") "bash"))
-;             (menu-bar-mode 1)
-;      )
-;)
 (when (eq system-type 'darwin)
       (progn (menu-bar-mode 1)
       )
 )
 
-;;; Add Nix profile to exec path; emacs doesn't know about bashrc.
+; Add Nix profile to exec path; emacs doesn't know about bashrc.
 (setenv "PATH" (concat (format "%s/.nix-profile/bin:" (getenv "HOME"))
                        (getenv "PATH")
                )
